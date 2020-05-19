@@ -24,31 +24,17 @@
 		role="navigation">
 		<a class="navbar-brand active ps-font" href="./index.htm">PIS
 			WARGAME</a>
-		<!-- button sử dụng để thả navbar cho màn hình nhỏ-->
-		<button class="navbar-toggler d-lg-none" type="button"
-			data-toggle="collapse" data-target="#collapsibleNavId"
-			aria-controls="collapsibleNavId" aria-expanded="false"
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-
 		<div class="collapse navbar-collapse" id="collapsibleNavId">
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item"><a class="nav-link"
-					href="challengeManage.htm">Challenge Management<span
-						class="sr-only">Home</span></a></li>
-				<li class="nav-item"><a class="nav-link" href="adminPanel/userManage.htm">User
-						Management</a></li>
-				<li class="nav-item"><a class="nav-link" href="rank.htm">Ranking</a></li>
-				<li class="nav-item"><a class="nav-link text-success"
-					href="userInfo.htm">Admin Info</a></li>
-				<li class="nav-item"><a class="nav-link" href="logout.htm">Logout</a></li>
-
+				<li class="nav-item"><a class="nav-link" href="adminPanel/adminPanel.htm">Admin Panel</a></li>
 			</ul>
 		</div>
 	</nav>
 	<div class=" text-white" style="margin-top:100px">
-		<h2>User account management</h2>
+	<div style="display: inline;">
+		<h2 style="float:left;">User account management</h2>
+		<a style="float:right;" href="adminPanel/addUser.htm" role="button" class="btn btn-danger">Add</a>
+	</div>
 		<h3 class="text-success">${message }</h3>
 		<h3 class="text-warning">${error }</h3>
 		<table class="table">

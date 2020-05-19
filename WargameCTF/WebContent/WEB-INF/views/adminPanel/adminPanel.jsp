@@ -34,8 +34,7 @@
 
 		<div class="collapse navbar-collapse" id="collapsibleNavId">
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item"><a class="nav-link" href="challengeManage.htm">Challenge Management<span
-						class="sr-only">Home</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="adminPanel/challengeManage.htm">Challenge Management</a></li>
 				<li class="nav-item"><a class="nav-link" href="adminPanel/userManage.htm">User Management</a></li>
 				<li class="nav-item"><a class="nav-link" href="rank.htm">Ranking</a></li>
 				<li class="nav-item"><a class="nav-link text-success"

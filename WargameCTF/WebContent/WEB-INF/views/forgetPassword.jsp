@@ -20,7 +20,7 @@
 <body class="bg-dark">
 	<nav class="navbar navbar-expand-sm navbar-dark fixed-top"
 		role="navigation">
-		<a class="navbar-brand active ps-font" href="#">PIS WARGAME</a>
+		<a class="navbar-brand active ps-font" href="index.htm">PIS WARGAME</a>
 		<!-- button sử dụng để thả navbar cho màn hình nhỏ-->
 		<button class="navbar-toggler d-lg-none" type="button"
 			data-toggle="collapse" data-target="#collapsibleNavId"

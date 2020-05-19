@@ -316,4 +316,5 @@ public class UserController {
 		sessionHttp.invalidate();
 		return "index";
 	}
+	
 }

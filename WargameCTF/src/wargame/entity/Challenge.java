@@ -2,6 +2,7 @@ package wargame.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 @Table(name="Challenges")
 public class Challenge {
 	@Id
+	@GeneratedValue
 	@Column(name = "ID")
 	private int id;
 	
@@ -21,7 +23,7 @@ public class Challenge {
 	@Column(name="fileAttach")
 	private String fileAttach;
 	
-	@Column(name="fileAttach")
+	@Column(name="description")
 	private String description;
 	
 	@Column(name="hint")

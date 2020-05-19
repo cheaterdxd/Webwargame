@@ -39,13 +39,11 @@
 				<%
 					if (session.getAttribute("user") != null) {
 				%>
-
 				<li class="nav-item"><a class="nav-link text-success"
 					href="userInfo.htm">User <%=session.getAttribute("username")%></a>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="logout.htm">Logout</a>
 				</li>
-
 				<%
 					} else {
 				%>
@@ -54,11 +52,13 @@
 				<%
 					}
 				%>
-				<% if(session.getAttribute("admin") != null){
-				%>
-				<li class="nav-item"><a class="nav-link" href="adminPanel/adminPanel.htm">Admin Panel</a></li>
 				<%
-				}
+					if (session.getAttribute("admin") != null) {
+				%>
+				<li class="nav-item"><a class="nav-link"
+					href="adminPanel/adminPanel.htm">Admin Panel</a></li>
+				<%
+					}
 				%>
 			</ul>
 		</div>

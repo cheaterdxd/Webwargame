@@ -1,6 +1,10 @@
 package wargame.mainController;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.ServletContext;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import wargame.dao.ChallengeDAO;
 import wargame.dao.UserDAO;
+import wargame.entity.Challenge;
 import wargame.entity.User;
+import generalFunction.FileWorking;
 
 @Controller
 @RequestMapping("adminPanel/")
@@ -39,16 +47,23 @@ public class adminController {
 		return "adminPanel/userManage/userManage";
 	}
 
-	@RequestMapping(value="update", params="email")
-	public String update(ModelMap model,@RequestParam("email") String mail) {
+//	@RequestMapping("addUser")
+//	public String addUser(ModelMap model) {
+//		User user = new User();
+//		model.addAttribute("user", user);
+//		return "adminPanel/userManage/add";
+//	}
+
+	@RequestMapping(value = "update", params = "email")
+	public String update(ModelMap model, @RequestParam("email") String mail) {
 		userDao.setFactory(factory);
 		User user = userDao.getUserByMail(mail);
 		model.addAttribute("user", user);
 		return "adminPanel/userManage/update";
 	}
-	
-	@RequestMapping(value="update", params="saveUpdate")
-	public String update(ModelMap model,@ModelAttribute("user") User user) {
+
+	@RequestMapping(value = "update", params = "saveUpdate")
+	public String update(ModelMap model, @ModelAttribute("user") User user) {
 //		dao.setFactory(factory);
 //		User user = dao.getUserByMail(mail);
 //		model.addAttribute("user", user);
@@ -72,10 +87,107 @@ public class adminController {
 		}
 		return "adminPanel/userManage/userManage";
 	}
-	
+
+	@RequestMapping("challengeManage")
 	public String challengeIndex(ModelMap model) {
 		challDao.setFactory(factory);
-		model.addAttribute("challenges",challDao.getListChallenge());
+		model.addAttribute("challenges", challDao.getListChallenge());
 		return "adminPanel/challengeManage/challengeIndex";
+	}
+
+	@RequestMapping("addChallenge")
+	public String addChallenge(ModelMap model) {
+		Challenge chall = new Challenge();
+		model.addAttribute("chall", chall);
+		return "adminPanel/challengeManage/add";
+	}
+
+	@Autowired
+	ServletContext context;
+	String rootPath = "D:/JAVACODE/WargameCTF/";
+	
+	@RequestMapping(value = "addChallenge", params = "submit")
+	public String addChallenge(ModelMap model, @ModelAttribute("chall") Challenge chall,
+			@RequestParam("files") MultipartFile[] files) {
+		String fileAttach = "";
+		for (MultipartFile file : files) {
+			fileAttach += file.getOriginalFilename();
+			fileAttach += ";";
+			try {
+				String filePath = rootPath + file.getOriginalFilename();
+				file.transferTo(new File(filePath));
+
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println(file.getOriginalFilename());
+		}
+		chall.setFileAttach(fileAttach);
+		challDao.setFactory(factory);
+		try {
+			challDao.insert(chall);
+			model.addAttribute("message", "Ban đã thêm thành công");
+		} catch (Exception e) {
+			model.addAttribute("message", "Ban đã thêm không thành công");
+		}
+		System.out.println(chall.getChallengeName());
+		System.out.println(chall.getMajor());
+		System.out.println(chall.getScore());
+		System.out.println(chall.getFileAttach());
+		return "adminPanel/challengeManage/add";
+	}
+
+	@RequestMapping(value = "editChallenge", method = RequestMethod.GET)
+	public String editChallenge(ModelMap model, @RequestParam("id") int id) {
+		challDao.setFactory(factory);
+		Challenge chall = challDao.getChallengeById(id);
+		model.addAttribute("chall", chall);
+		List<String> filelist = challDao.changeStringFileToMultiPart(rootPath, chall);
+		model.addAttribute("filelist", filelist);
+		System.out.println(chall.getId());
+		System.out.println(chall.getChallengeName());
+		System.out.println(chall.getMajor());
+		System.out.println(chall.getScore());
+		return "adminPanel/challengeManage/update";
+	}
+
+	@RequestMapping(value = "editChallenge", params = "update")
+	public String editChallenge(ModelMap model, @ModelAttribute("chall") Challenge chall,@RequestParam("files") MultipartFile[] files) {
+		String fileAttach="";
+		for (MultipartFile file : files) {
+			fileAttach += file.getOriginalFilename();
+			fileAttach += ";";
+			try {
+				String filePath = rootPath + file.getOriginalFilename();
+				file.transferTo(new File(filePath));
+
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println(file.getOriginalFilename());
+		}
+		
+		
+		challDao.setFactory(factory);
+		System.out.println(chall.getId());
+		System.out.println(chall.getFileAttach());
+		System.out.println(chall.getChallengeName());
+		System.out.println(chall.getMajor());
+		System.out.println(chall.getScore());
+		System.out.println(chall.getDescription());
+		System.out.println(chall.getHint());
+		if(!fileAttach.equals("") && fileAttach!=null) {
+			// xoá đi file cũ
+			for(String file : challDao.changeStringFileToMultiPart(rootPath, chall)) FileWorking.deleteFile(file);
+			// set file mới
+			chall.setFileAttach(fileAttach);
+		}
+		challDao.update(chall);
+//		model.addAttribute("message", "Ban da update thanh cong !" + chall.getId());
+		return "adminPanel/challengeManage/update";
 	}
 }
