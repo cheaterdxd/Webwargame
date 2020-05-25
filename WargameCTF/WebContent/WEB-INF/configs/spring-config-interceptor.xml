@@ -25,6 +25,7 @@
 			<mvc:exclude-mapping path="/index.htm" />
 			<mvc:exclude-mapping path="/login.htm" />
 			<mvc:exclude-mapping path="/register.htm" />
+			<mvc:exclude-mapping path="/forgetPassword.htm" />
 			<bean class="wargame.interceptor.SecurityInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

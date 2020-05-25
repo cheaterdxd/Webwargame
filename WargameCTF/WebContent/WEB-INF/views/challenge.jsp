@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="./navbar.css?version=1">
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark text-white">
 	<nav class="navbar navbar-expand-sm fixed-top"
 		role="navigation">
 		<a class="navbar-brand active ps-font nav-a" href="index.htm">PIS
@@ -67,50 +67,70 @@
 			</ul>
 		</div>
 	</nav>
-
-	<div class="container-fluid text-white mt-2">
-		<div class="col-md-7 div-home">
-			<!-- col-md-7 là chia grid thành 12 phần, div này chiếm 7 phần -->
-			<!--  div-home là custom css -->
-			<h3 class="ps-font">ABOUT</h3>
-			<p class="ml-4">
-				Đây là 1 sân chơi <a
-					href="https://whitehat.vn/threads/ctf-cature-the-flag-la-gi.6717/">CTF</a>
-				tạo điều kiện cho các bạn sinh viên nâng cao kĩ năng và kiến thức về
-				hacking, exploiting.
-			</p>
-			<h3 class="ps-font">HOW TO</h3>
-			<ul>
-				<li>Hãy cố gắng tìm lỗi của tồn tài trong thử thách và khai
-					thác nó để lấy được flag.</li>
-				<li>Chúng tôi hỗ trợ các thử thách cho 4 mảng nhỏ:
-					<ul>
-						<li>Pwnable</li>
-						<li>Web</li>
-						<li>RE</li>
-						<li>Crypto</li>
-					</ul>
-				</li>
-				<li>Đa phần những challenge chạy trên ubuntu16.04/18.04</li>
-			</ul>
-			<h3 class="ps-font">RULES</h3>
-			<ul>
-				<li>Không được DDOS hoặc thực hiện các hành vi cố tình xâm hại
-					hệ thống server của chúng tôi.</li>
-				<li>Không được chia sẻ FLAGS 1 cách công khai giữa những người
-					tham gia.</li>
-				<li>Nếu bạn tìm ra được bugs, vui lòng thông báo cho chúng tôi
-					qua contact.</li>
-			</ul>
-			<h3 class="ps-font">CONTACT</h3>
-			<ul>
-				<li>d17pis@gmail.com</li>
-				<li>Discord Channel</li>
-				<li>Nếu bạn thích chúng tôi, bạn có thể hỗ trợ chúng tôi 1 phần
-					chi phí duy trì server ở <a href="#">đây</a>.
-				</li>
-			</ul>
+	<div class="container offset-md-2 col-md-8 text-center"
+		style="margin-top: 100px">
+		<div style="padding-bottom: 50px">
+			<h1>CHALLENGES</h1>
 		</div>
+		<c:forEach var="c" items="${challs}" varStatus="counts">
+			<div class="my-4">
+				<!-- khối điều khiển collapse -->
+				<div class="challenge-block py-2" 
+					data-toggle="collapse"
+					data-target="#${ counts.count}">
+					${c.challengeName} - Score: ${c.score } 
+					<span
+						class="badge badge-info float-right mr-2">${c.major}
+					</span>
+					<c:if test="${c.isSovledBy(sessionScope.user.mail)}">
+						<span
+							class="badge badge-success float-right mr-2">Solved
+						</span>
+					</c:if>
+				</div>
+				<!-- khối collapse -->
+				<div id="${counts.count}" class="collapse">
+					<div class="card bg-white text-dark border border-light py-2"
+						style="border-radius: 25px;">
+						<div class="py-2">${c.description }</div>
+						<c:forEach var="f" items="${c.changeStringFileToList()}">
+							<a href="files/${f }" download>${f }</a>
+						</c:forEach>
+						<!-- hint -->
+						<div>
+							<!-- khối điều khiển collapse của hint -->
+							<button class="btn btn-info my-3"
+										 data-toggle="collapse"
+										 data-target="#id${counts.count}"
+										 style="width: 62%">
+										 Hint
+							</button>
+							<!-- khối collapse của hint -->
+							<div id="id${ counts.count}" class="collapse">${c.hint }</div>
+						</div>
+						<!-- form submit flag -->
+						<c:if test="${c.isSovledBy(sessionScope.user.mail)!=true}">
+							<div>
+								<form>
+									<div>
+										<input type="text" name="id" value="${c.id }" hidden/>
+										<input type="text" name="flag" style="width: 50%" />
+										<button  name="submitFlag" class="btn btn-success">Submit flag</button>
+									</div>
+								</form>
+							</div>
+						</c:if>
+					</div>
+
+				</div>
+			</div>
+		</c:forEach>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 </body>
 </html>

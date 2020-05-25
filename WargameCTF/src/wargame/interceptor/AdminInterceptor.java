@@ -8,12 +8,15 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import wargame.entity.User;
+
 public class AdminInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 		HttpSession session = request.getSession();
-		if(session.getAttribute("admin")==null) {
-			String redirect = request.getContextPath()+"/login.htm";
+		User user = (User)session.getAttribute("user");
+		if(!user.getIsAdmin()) {
+			String redirect = request.getContextPath()+"/index.htm";
 			try {
 				response.sendRedirect(redirect);
 			} catch (IOException e) {

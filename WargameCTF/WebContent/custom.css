@@ -2,16 +2,69 @@
     font-family: 'Press Start 2P', cursive;
     src:url("Press_Start_2P/PressStart2P-Regular");
     text-transform: uppercase;
-    text-shadow: 4px 4px #111;
+    text-shadow: 4px 4px #66a1a3;
     padding-top: 15px;
+    color:#36595a;
   }
 .div-home{
     padding-left: 230px;
     padding-top: 90px;
     padding-bottom: 15px;
     font-size: 15px;
+    color:#dae9e7;
 }
 .body-register {
 	margin-top: 100px;
+}
+.body-color{
+	background-color: #0d0221;
+}
+.box{
+  width: 400px;
+  padding: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #c6e2e9;
+  text-align: center;
+}
+.box h1{
+  color: #124F51;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.box input[type = "text"],.box input[type = "password"], .box input[type = "email"]{
+  border:0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #124F51;
+  padding: 14px 10px;
+  width: 300px;
+  outline: none;
+  color: black;
+  border-radius: 24px;
+}
+.box input[type = "text"]:focus,.box input[type = "password"]:focus{
+  border-color: #124F51;
+}
+.box input[type = "submit"]{
+  border:0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #124F51;
+  padding: 14px 40px;
+  outline: none;
+  color: #124F51;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.challenge-block{
+	border: 1px solid #c6e2e9;
+	border-radius: 25px;
 }
 

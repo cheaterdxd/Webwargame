@@ -51,7 +51,7 @@
 			<h1 style="padding-bottom: 100px;">ACCOUNT PASSWORD FORGET</h1>
 		</div>
 		<div class="container">
-			<h6 class="text-warning">${message }
+			<h6 class="text-primary">
 				<br>Nhập vào mail của account mà bạn muốn lấy lại mật khẩu,
 				chúng tôi sẽ gửi mật khẩu đến địa chỉ mail được đăng kí ban đầu.
 			</h6>
@@ -65,6 +65,7 @@
 						required="required"
 						pattern="(([^<>()\[\]\\.,;:\s@]+(\.[^<>()\[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$">
 				</div>
+				<h6 class="text-danger">${message }</h6>
 				<button type="submit" class="btn btn-primary" name="forgetPassword">Submit</button>
 			</form:form>
 		</div>

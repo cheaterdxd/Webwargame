@@ -126,12 +126,7 @@ public class adminController {
 		}
 		chall.setFileAttach(fileAttach);
 		challDao.setFactory(factory);
-		try {
-			challDao.insert(chall);
-			model.addAttribute("message", "Ban đã thêm thành công");
-		} catch (Exception e) {
-			model.addAttribute("message", "Ban đã thêm không thành công");
-		}
+		challDao.insert(chall);
 		System.out.println(chall.getChallengeName());
 		System.out.println(chall.getMajor());
 		System.out.println(chall.getScore());
@@ -189,5 +184,14 @@ public class adminController {
 		challDao.update(chall);
 //		model.addAttribute("message", "Ban da update thanh cong !" + chall.getId());
 		return "adminPanel/challengeManage/update";
+	}
+	
+	@RequestMapping(value="deleteChallenge")
+	public String deleteChallenge(ModelMap model, @RequestParam("id") int id) {
+		challDao.setFactory(factory);
+		Challenge chall = challDao.getChallengeById(id);
+		if(challDao.delete(chall)) model.addAttribute("message", "Ban da xoa thanh cong!");
+		else model.addAttribute("message", "Ban da xoa that bai!");
+		return challengeIndex(model);
 	}
 }

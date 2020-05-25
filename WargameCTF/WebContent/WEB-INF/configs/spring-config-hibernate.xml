@@ -31,14 +31,16 @@
 	      <props>        
 	            <prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>          
 	            <prop key="hibernate.show_sql">false</prop>
+	            <prop key="hibernate.format_sql">false</prop>
 	       </props>
 	    </property>
 		<property name="packagesToScan" value="wargame.entity"/>
+		
 	</bean>
 	
 	<!-- Transaction Manager -->
     <bean id="transactionManager" 
     		class="org.springframework.orm.hibernate4.HibernateTransactionManager" 
        		p:sessionFactory-ref="sessionFactory" />
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <tx:annotation-driven transaction-manager="transactionManager" />    
 </beans>

@@ -51,7 +51,7 @@
 				<div class="form-group">
 					<label for="name">Name</label>
 					<form:input path="challengeName" cssClass="form-control"
-						maxlength="50" />
+						maxlength="50" pattern="[._-\w]+" />
 				</div>
 				<!--  
 				<div class="form-group">
@@ -72,12 +72,16 @@
 				</div>
 				<div class="form-group">
 					<label for="major">Major</label>
-					<form:input cssClass="form-control" path="major" maxlength="20" />
+					<form:input cssClass="form-control" path="major" maxlength="20" pattern="\w+" />
+				</div>
+				<div class="form-group">
+					<label for="flag">Flag</label>
+					<form:input cssClass="form-control" path="flag" maxlength="100" pattern="^[0-9a-zA-Z_.-]"/>
 				</div>
 				<div class="form-group ">
 					<label for="score">Score</label>
 					<h6 class="text-warning">${messageUsername }</h6>
-					<form:input cssClass="form-control" path="score" min="0" max="1000" />
+					<form:input cssClass="form-control" path="score" min="0" max="1000" type="number" />
 				</div>
 				<div class="form-group">
 					<label for="description">Description</label>

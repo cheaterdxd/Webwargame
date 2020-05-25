@@ -1,0 +1,13 @@
+.navbar{
+	 background-color: #c6e2e9;
+}
+
+.userInfo{
+	color: RGB(0, 0, 0);
+}
+.nav-a{
+	color: #124F51;
+}
+a:hover{
+	color: #ac3b61;
+}

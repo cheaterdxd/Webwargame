@@ -46,23 +46,30 @@
 				<div class="form-group">
 					<label for="name">Name</label> <input type="text"
 						class="form-control" name="challengeName" required="required"
-						maxlength="50">
+						maxlength="50" pattern="[._-\w]+">
+				</div>
+				<div class="form-group">
+					<label for="major">Major</label> <input type="text"
+						class="form-control" name="major" required="required"
+						maxlength="20"  pattern="\w+">
+				</div>
+				<div class="form-group">
+					<label for="flag">Flag</label> <input type="text"
+						class="form-control" name="flag" required="required"
+						maxlength="100" pattern="[0-9a-zA-Z_.-]+">
 				</div>
 				<div class="form-group">
 					<label for="fileAttach">File</label><br> <input type="file"
 						name="files" multiple="multiple">
 				</div>
-				<div class="form-group">
-					<label for="major">Major</label> <input type="text"
-						class="form-control" name="major" required="required"
-						maxlength="20">
-				</div>
+				
 				<div class="form-group ">
 					<label for="score">Score</label>
 					<h6 class="text-warning">${messageUsername }</h6>
 					<input type="number" class="form-control" name="score"
 						required="required" min="0" max="1000">
 				</div>
+				<!--  vì không phải thao tác với description và hint nên ko cần pattern -->
 				<div class="form-group">
 					<label for="description">Description</label>
 					<!-- <input type="text" class="form-control" name="description" maxlength="200"> -->

@@ -12,7 +12,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 		HttpSession session = request.getSession();
-		if(session.getAttribute("username")==null) {
+		if(session.getAttribute("user")==null) {
 			String redirect = request.getContextPath()+"/login.htm";
 			try {
 				response.sendRedirect(redirect);

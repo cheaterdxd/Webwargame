@@ -1,6 +1,9 @@
 package wargame.mainController;
 
 import generalFunction.GenerateRandomCodeValid;
+
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import wargame.bean.Mailer;
+import wargame.dao.SolvedDAO;
 import wargame.dao.UserDAO;
+import wargame.entity.Solved;
 import wargame.entity.User;
 
 @Controller
@@ -27,6 +32,8 @@ public class UserController {
 	Mailer mailer;
 	@Autowired
 	UserDAO dao;
+	@Autowired
+	SolvedDAO solveDao;
 
 	String code; // code dùng để validation account
 	String username; //
@@ -214,9 +221,9 @@ public class UserController {
 			// set user đã đăng nhập lên session
 			sessionHttp.setAttribute("user", user);
 			//set user để cập nhật view
-			sessionHttp.setAttribute("username", user.getUserName());
-			// kiểm tra có phải admin không 
-			if(user.getIsAdmin()) sessionHttp.setAttribute("admin", true);
+//			sessionHttp.setAttribute("username", user.getUserName());
+//			// kiểm tra có phải admin không 
+//			if(user.getIsAdmin()) sessionHttp.setAttribute("admin", true);
 			System.out.println("đăng nhập thành công!");//test
 			//chuyển tới trang chủ
 			return "index";
@@ -233,15 +240,13 @@ public class UserController {
 	// xử lí khi bấm nút submit
 	@RequestMapping(value = "forgetPassword", params = "forgetPassword")
 	public String forgetPassword(ModelMap model, @RequestParam("mail") String mail) {
-	
+		dao.setFactory(factory);
 		// nếu không tồn tại user thì tức là thằng này nhập 1 email sai
 		// trái
 		if (dao.isMailExist(mail)) {
 			model.addAttribute("message", "Mail này không tồn tại, vui lòng kiểm tra lại! ");
 			return "forgetPassword";
 		}
-		
-		dao.setFactory(factory);
 		User user = dao.getUserByMail(mail);
 		
 		// nếu có , tức là không có sai, thi gui mail gui info ve
@@ -270,14 +275,16 @@ public class UserController {
 	// view userInfo
 	@RequestMapping("userInfo")
 	public String userInfo(ModelMap model, HttpServletRequest request) {
+		dao.setFactory(factory);
 		HttpSession sessionHttp = request.getSession();
 		User user = (User) sessionHttp.getAttribute("user");
-//		User user = new User();
 		System.out.println(user);
 		model.addAttribute("user", user);
+		model.addAttribute("solves",dao.getListSolved(user.getMail()));
 		return "userInfo";
 	}
-
+	
+	// edit/update info
 	@RequestMapping(value = "userInfo", params = "update")
 	public String userInfo(ModelMap model, HttpServletRequest request, @ModelAttribute("user") User user,
 			@RequestParam("newPassword") String newPassword) {

@@ -1,6 +1,5 @@
 package wargame.dao;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import wargame.entity.Challenge;
 
@@ -62,8 +60,9 @@ public class ChallengeDAO {
 		}
 	}
 	
-	public void delete(Challenge chall) {
+	public boolean delete(Challenge chall) {
 		Session session = factory.openSession();
+		boolean excuteRight=true; 
 		Transaction trans = session.beginTransaction();
 		try {
 
@@ -76,11 +75,13 @@ public class ChallengeDAO {
 
 			// nếu có vấn đề thì rollback lại
 			trans.rollback();
+			excuteRight = false;
 		} finally {
 
 			// đóng session
 			session.close();
 		}
+		return excuteRight;
 	}
 	
 	public List<Challenge> getListChallenge(){
