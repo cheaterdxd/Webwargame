@@ -10,12 +10,16 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
+import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
 @Entity
@@ -23,16 +27,22 @@ import com.sun.istack.internal.Nullable;
 public class User {
 	// declare field
 	@Id
+//	@Email(message = "Xin vui lòng nhập đúng định dạng")
 	@Column(name = "Mail")
 	private String mail;
+	
+//	@Pattern(regexp = "\\w+",message = "Username chỉ gồm chữ và số")
+//	@Length(max =15,min = 1,message = "Username ngắn hơn 15 kí tự")
 	@Column(name = "Username")
 	private String userName;
+	
 	@Column(name = "Password")
 	private String passWord;
+	
 	@Column(name = "Validation")
 	private boolean valid;
+	
 	@Column(name = "Isadmin")
-	@Nullable
 	private boolean isAdmin;
 
 	@OneToMany(mappedBy = "solvedKey.user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

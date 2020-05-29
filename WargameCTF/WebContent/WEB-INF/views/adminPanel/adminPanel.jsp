@@ -47,9 +47,9 @@
 							</li>
 						</c:if>
 						<li class="nav-item">
-							<a class="nav-link text-success"
+							<a class="nav-link nav-a"
 								href="../userInfo.htm">
-								User ${sessionScope.user.userName} 
+								Profile 
 							</a>
 						</li>
 						<li class="nav-item">

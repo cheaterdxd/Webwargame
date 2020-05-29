@@ -67,9 +67,9 @@ public class MainPage {
 //		}
 		return "challenge";
 	}
-
+	
 	@RequestMapping(value = "challenge", params = "submitFlag")
-	public String challenge(ModelMap model, HttpServletRequest request, @RequestParam("flag") String flag,
+	public String submitChallenge(ModelMap model, HttpServletRequest request, @RequestParam("flag") String flag,
 			@RequestParam("id") int id) {
 		System.out.println("vao ham");
 		challDao.setFactory(factory);
@@ -79,8 +79,13 @@ public class MainPage {
 		Challenge chall = challDao.getChallengeById(id);
 		User user = (User) sessionHttp.getAttribute("user");
 //		User user2 = userDao.getUserByMail(user.getMail());
-		if (chall.isSovledBy(user.getMail())) {
-			System.out.println("giai roi");
+//		if (chall.isSovledBy(user.getMail())) {
+//			System.out.println("giai roi");
+//			return "challenge";
+//		}
+		if (chall.getFlag().length() < 1 || chall.getFlag().length() > 100) {
+			model.addAttribute("flagError", true);
+			model.addAttribute("challs", challDao.getListChallenge());
 			return "challenge";
 		}
 		if (chall.getFlag().equals(flag)) {
@@ -93,9 +98,14 @@ public class MainPage {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			solved.setDateSolved(formatter.format(new Date()));
 			sovledDao.insert(solved);
+			System.out.println("đúng rồi.");
+			model.addAttribute("rightFlag", true);
+		}
+		else {
+			model.addAttribute("wrongFlag", true);
 		}
 		
 		model.addAttribute("challs", challDao.getListChallenge());
-		return "redirect:challenge.htm";
+		return "challenge";
 	}
 }

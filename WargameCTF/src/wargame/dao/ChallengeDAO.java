@@ -19,7 +19,8 @@ public class ChallengeDAO {
 		this.factory = factory;
 	}
 
-	public void insert(Challenge chall) {
+	public boolean insert(Challenge chall) {
+		boolean excuteRight = true;
 		Session session = factory.openSession();
 		Transaction trans = session.beginTransaction();
 		try {
@@ -29,35 +30,40 @@ public class ChallengeDAO {
 			// nếu không xảy ra vấn đề thì commit
 			trans.commit();
 		} catch (Exception e) {
-
+			excuteRight = false;
+			System.out.println("Insert challenge failed \n");
 			// nếu có vấn đề thì rollback lại
 			trans.rollback();
 		} finally {
-
+			
 			// đóng session
 			session.close();
 		}
+		return excuteRight;
 	}
 	
-	public void update(Challenge chall) {
+	public boolean update(Challenge chall) {
+		boolean excuteRight = true;
 		Session session = factory.openSession();
 		Transaction trans = session.beginTransaction();
 		try {
 
 			// update
 			session.update(chall);
-
+			
 			// nếu không xảy ra vấn đề thì commit
 			trans.commit();
 		} catch (Exception e) {
+			excuteRight = false;
+			System.out.println(e.getMessage());
 			System.out.println("có lỗi!");
 			// nếu có vấn đề thì rollback lại
 			trans.rollback();
 		} finally {
-
 			// đóng session
 			session.close();
 		}
+		return excuteRight;
 	}
 	
 	public boolean delete(Challenge chall) {
@@ -65,19 +71,18 @@ public class ChallengeDAO {
 		boolean excuteRight=true; 
 		Transaction trans = session.beginTransaction();
 		try {
-
+			System.out.println(chall);
 			// xoá
 			session.delete(chall);
-
 			// nếu không xảy ra vấn đề thì commit
 			trans.commit();
 		} catch (Exception e) {
-
+			System.out.println("Delete challenge failed \n");
+			System.out.println(e.getMessage()+"\n" + e.getCause());
 			// nếu có vấn đề thì rollback lại
 			trans.rollback();
 			excuteRight = false;
 		} finally {
-
 			// đóng session
 			session.close();
 		}

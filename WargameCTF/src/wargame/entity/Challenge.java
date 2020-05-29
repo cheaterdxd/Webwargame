@@ -8,13 +8,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "Challenges")
@@ -23,25 +29,25 @@ public class Challenge {
 	@GeneratedValue
 	@Column(name = "challengeID")
 	private int challengeID;
-
+	
 	@Column(name = "challengName")
 	private String challengeName;
-
+	
 	@Column(name = "score")
 	private int score;
-
+	
 	@Column(name = "fileAttach")
 	private String fileAttach;
-
+	
 	@Column(name = "description")
 	private String description;
-
+	
 	@Column(name = "hint")
 	private String hint;
-
+	
 	@Column(name = "major")
 	private String major;
-
+	
 	@Column(name = "flag")
 	private String flag;
 

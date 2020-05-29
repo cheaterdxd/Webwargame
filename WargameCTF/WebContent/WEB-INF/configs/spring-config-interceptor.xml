@@ -16,10 +16,12 @@
 
 	<!-- Cấu hình interceptor -->
 	<mvc:interceptors>
+	
 		<mvc:interceptor>
 			<mvc:mapping path="/adminPanel/**" />
 			<bean class="wargame.interceptor.AdminInterceptor" />
 		</mvc:interceptor>
+		
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/index.htm" />

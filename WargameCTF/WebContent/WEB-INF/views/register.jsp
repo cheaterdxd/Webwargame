@@ -49,13 +49,13 @@
 			<!-- không cho phép nhập những kí tự đặc biệt, sợ bị hack
 				Không cho phép nhập quá nhiều,sợ bị hack
 				Không cho phép không nhập -->
-			<h6 class="text-warning">${messageMail}</h6>
 			<input type="email" name="mail" required="required"
 				placeholder="Email"
 				pattern="(([^<>()\[\]\\.,;:\s@]+(\.[^<>()\[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$">
-			<h6 class="text-warning">${messageUsername }</h6>
+			<form:errors path="mail" cssClass="text-danger"></form:errors>
 			<input type="text" name="userName" required="required"
 				placeholder="Username" pattern="\w+" maxlength="15">
+			<form:errors path="userName" cssClass="text-danger"></form:errors>
 			<input type="password" name="passWord" required="required"
 				placeholder="Password" maxlength="20">
 			<input type="submit" name="submit" value="Register">

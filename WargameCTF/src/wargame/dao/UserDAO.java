@@ -25,7 +25,8 @@ public class UserDAO {
 		this.factory = factory;
 	}
 
-	public void insert(User user) {
+	public boolean insert(User user) {
+		boolean excuteRight = true;
 		Session session = factory.openSession();
 		Transaction trans = session.beginTransaction();
 		try {
@@ -35,7 +36,8 @@ public class UserDAO {
 			// nếu không xảy ra vấn đề thì commit
 			trans.commit();
 		} catch (Exception e) {
-
+			System.out.println("Loi insert user!");
+			excuteRight = false;
 			// nếu có vấn đề thì rollback lại
 			trans.rollback();
 		} finally {
@@ -43,11 +45,13 @@ public class UserDAO {
 			// đóng session
 			session.close();
 		}
+		return excuteRight;
 	}
 
-	public void update(User user) {
+	public boolean update(User user) {
 		Session session = factory.openSession();
 		Transaction trans = session.beginTransaction();
+		boolean excuteRight = true;
 		try {
 
 			// update
@@ -57,6 +61,7 @@ public class UserDAO {
 			trans.commit();
 		} catch (Exception e) {
 			System.out.println("Xay ra loi trong khi update user !");
+			excuteRight = false;
 			// nếu có vấn đề thì rollback lại
 			trans.rollback();
 		} finally {
@@ -64,20 +69,24 @@ public class UserDAO {
 			// đóng session
 			session.close();
 		}
+		return excuteRight;
 	}
 	
-	public void delete(User user) {
+	public boolean delete(User user) {
+		boolean excuteRight =true;
 		Session session = factory.openSession();
 		Transaction trans = session.beginTransaction();
 		try {
-
+			user.setChalls(null);
 			// xoá
 			session.delete(user);
 
 			// nếu không xảy ra vấn đề thì commit
 			trans.commit();
 		} catch (Exception e) {
-
+			excuteRight = false;
+			System.out.println(e);
+			System.out.println("Xay ra loi trong khi delete user !");
 			// nếu có vấn đề thì rollback lại
 			trans.rollback();
 		} finally {
@@ -85,6 +94,7 @@ public class UserDAO {
 			// đóng session
 			session.close();
 		}
+		return excuteRight;
 	}
 	
 	public User getUserByMail(String mail) {
@@ -95,7 +105,7 @@ public class UserDAO {
 		Query query2 = session.createQuery(checkMailhql);
 		query2.setParameter("mail", mail);
 		User userRequestDatabase2 = (User) query2.uniqueResult();
-		System.out.println("Get user by mail:" + userRequestDatabase2.getUserName() );
+		if(userRequestDatabase2 != null) System.out.println("Get user by mail:" + userRequestDatabase2.getUserName() );
 		return userRequestDatabase2;
 	}
 
@@ -103,7 +113,7 @@ public class UserDAO {
 		User userRequestDatabase2 = getUserByMail(mail);
 		System.out.println("check exist:" + userRequestDatabase2 );
 		// nếu tồn tại
-		if (userRequestDatabase2.getMail().equals(mail)) {
+		if (userRequestDatabase2 != null && userRequestDatabase2.getMail().trim().equals(mail)) {
 			return true;
 		}
 		return false;
@@ -148,6 +158,15 @@ public class UserDAO {
 			query.setParameter("password", password);
 
 		List<User> list = query.list();
+		return list;
+	}
+	
+	public List<User> getListUser(){
+		List<User> list;
+		Session session = factory.getCurrentSession();
+		String hql = "FROM User ";
+		Query query = session.createQuery(hql);
+		list = query.list();
 		return list;
 	}
 	

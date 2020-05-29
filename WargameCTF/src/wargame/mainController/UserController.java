@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,23 +49,51 @@ public class UserController {
 
 	// xử lí register khi bấm nút submit
 	@RequestMapping(value = "register", params = "submit")
-	public String register(ModelMap model, @ModelAttribute("user") User user, HttpServletRequest request) {
+	public String register(ModelMap model,
+			@ModelAttribute("user") User user,
+			HttpServletRequest request,
+			BindingResult erros) {
 //		test
 //		System.out.println(user.getMail());
 //		System.out.println(user.getUserName());
 //		System.out.println(user.getPassWord());
 
 		dao.setFactory(factory);
-
+		System.out.println(user);
+		
+//		Check format mail
+		String mailFormatter = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+		if(!user.getMail().matches(mailFormatter)) {
+			erros.rejectValue("mail", "user", "Vui lòng nhập đúng định dạng mail!");
+		}
+//		check length+format username
+		String name = user.getUserName();
+		if(name.length()>15 || name.length()<1) {
+			erros.rejectValue("userName", "user", "Độ dài tên từ 1-20 kí tự!");
+		}
+		if(!name.matches("\\w+")) {
+			erros.rejectValue("userName","user", "Tên chỉ gồm chữ cái và số!");
+		}
+//		check length password
+		if(user.getPassWord().length()>20 || user.getPassWord().length()<1) {
+			erros.rejectValue("password", "user", "Độ dài mật khẩu từ 1-20 kí tự!");
+		}
+		
+		
+		
 		// check username info
 		if (dao.isUsernameExist(user.getUserName())) {
-			model.addAttribute("messageUsername", "Username has been used.");
+//			model.addAttribute("messageUsername", "Username has been used.");
+			System.out.println("User đã được sử dụng");
+			erros.rejectValue("userName", "user", "Username này đã được sử dụng!");
 			return "register";
 		}
 
 		// check mail info
 		if (dao.isMailExist(user.getMail())) {
-			model.addAttribute("messageMail", "Mail has been used.");
+//			model.addAttribute("messageMail", "Mail has been used.");
+			System.out.println("Mail đã được sử dụng");
+			erros.rejectValue("mail", "user", "Mail này đã được sử dụng!");
 			return "register";
 		}
 
@@ -76,7 +106,7 @@ public class UserController {
 			dao.insert(user);
 
 			// set message là thành công
-			model.addAttribute("message", "Register succesed!");
+			model.addAttribute("message", "Đăng kí thành công!");
 
 			// lưu lại user cho validation
 			sessionHttp.setAttribute("user", user);
@@ -87,11 +117,11 @@ public class UserController {
 		} catch (Exception e) {
 
 			// set message thất bại
-			model.addAttribute("message", "Register failed!");
+			model.addAttribute("message", "Đăng kí thất bại!");
 		}
 		return "register";
 
-		// return v�? validation
+		// return về validation
 	}
 
 	// view xác thực account
@@ -183,7 +213,8 @@ public class UserController {
 
 	// xử lí khi bấm nút login
 	@RequestMapping(value = "login", params = "login")
-	public String login(ModelMap model, HttpServletRequest request, @RequestParam("username") String username,
+	public String login(ModelMap model, HttpServletRequest request,
+			@RequestParam("username") String username,
 			@RequestParam("password") String password) {
 		System.out.println(username);
 		System.out.println(password);
@@ -220,10 +251,6 @@ public class UserController {
 		if (user.getValidation() == true) {
 			// set user đã đăng nhập lên session
 			sessionHttp.setAttribute("user", user);
-			//set user để cập nhật view
-//			sessionHttp.setAttribute("username", user.getUserName());
-//			// kiểm tra có phải admin không 
-//			if(user.getIsAdmin()) sessionHttp.setAttribute("admin", true);
 			System.out.println("đăng nhập thành công!");//test
 			//chuyển tới trang chủ
 			return "index";
@@ -243,7 +270,7 @@ public class UserController {
 		dao.setFactory(factory);
 		// nếu không tồn tại user thì tức là thằng này nhập 1 email sai
 		// trái
-		if (dao.isMailExist(mail)) {
+		if (!dao.isMailExist(mail)) {
 			model.addAttribute("message", "Mail này không tồn tại, vui lòng kiểm tra lại! ");
 			return "forgetPassword";
 		}
@@ -286,8 +313,9 @@ public class UserController {
 	
 	// edit/update info
 	@RequestMapping(value = "userInfo", params = "update")
-	public String userInfo(ModelMap model, HttpServletRequest request, @ModelAttribute("user") User user,
-			@RequestParam("newPassword") String newPassword) {
+	public String userInfo(ModelMap model,
+			HttpServletRequest request,
+			@ModelAttribute("user") User user) {
 		HttpSession sessionHttp = request.getSession();
 
 		// lấy user đag lưu ở session
@@ -297,9 +325,6 @@ public class UserController {
 		if (!currentUser.getUserName().equals(user.getUserName()))
 			currentUser.setUserName(user.getUserName());
 
-		// kiểm tra password có nhập vào mới không ,nếu có thì kiểm tra pass nhập vào
-		if (!newPassword.isEmpty())
-			currentUser.setPassWord(newPassword);
 //		System.out.println(newPassword.isEmpty());
 //		System.out.println(currentUser.getUserName());
 //		System.out.println(user.getUserName());
@@ -308,7 +333,8 @@ public class UserController {
 		// cập nhật currentUser
 		dao.setFactory(factory);
 		dao.update(currentUser);
-
+		
+		model.addAttribute("solves", dao.getListSolved(user.getMail()));
 		return "userInfo";
 	}
 	
@@ -324,4 +350,35 @@ public class UserController {
 		return "index";
 	}
 	
+	@RequestMapping(value="changePassword")
+	public String changePassword(ModelMap model, HttpServletRequest request) {
+		dao.setFactory(factory);
+		HttpSession sessionHttp = request.getSession();
+		User user = (User) sessionHttp.getAttribute("user");
+		model.addAttribute("user", user);
+		return "changePassword";
+	}
+	
+	@RequestMapping(value="changePassword",params = "submit")
+	public String changePassword(ModelMap model,
+			HttpServletRequest request,
+			@RequestParam("oldPassword") String oldPass,
+			@RequestParam("newPassword") String newPass) {
+		dao.setFactory(factory);
+		HttpSession sessionHttp = request.getSession();
+		User user = (User) sessionHttp.getAttribute("user");
+		System.out.println("old pass: " + oldPass + "\n"+ "new pass: "+newPass);
+		if(!user.getPassWord().trim().equals(oldPass)) {
+			model.addAttribute("oldPassError", "Mật khẩu sai!");
+			return "changePassword";
+		}
+		if(newPass.length()<1 || newPass.length()>20) {
+			model.addAttribute("newPassError", "Độ dài mật khẩu (1-20) kí tự!");
+			return "changePassword";
+		}
+		user.setPassWord(newPass);
+		dao.update(user);
+		model.addAttribute("success", true);
+		return "changePassword";
+	}
 }

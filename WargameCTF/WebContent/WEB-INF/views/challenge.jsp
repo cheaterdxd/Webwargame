@@ -19,8 +19,7 @@
 </head>
 
 <body class="bg-dark text-white">
-	<nav class="navbar navbar-expand-sm fixed-top"
-		role="navigation">
+	<nav class="navbar navbar-expand-sm fixed-top" role="navigation">
 		<a class="navbar-brand active ps-font nav-a" href="index.htm">PIS
 			WARGAME</a>
 		<!-- button sử dụng để thả navbar cho màn hình nhỏ-->
@@ -33,34 +32,26 @@
 
 		<div class="collapse navbar-collapse" id="collapsibleNavId">
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item"><a class="nav-link nav-a" href="challenge.htm">Challenge</a></li>
+				<li class="nav-item"><a class="nav-link nav-a"
+					href="challenge.htm">Challenge</a></li>
 				<li class="nav-item"><a class="nav-link nav-a" href="rank.htm">Ranking</a>
 				</li>
 				<c:choose>
 					<c:when test="${sessionScope.user !=null}">
 						<c:if test="${sessionScope.user.isAdmin}">
-							<li class="nav-item">
-								<a class="nav-link nav-a" 
-								   href="adminPanel/adminPanel.htm">
-								   Admin Panel
-								</a>
-							</li>
+							<li class="nav-item"><a class="nav-link nav-a"
+								href="adminPanel/adminPanel.htm"> Admin Panel </a></li>
 						</c:if>
-						<li class="nav-item">
-							<a class="nav-link text-success"
-								href="userInfo.htm">
-								User ${sessionScope.user.userName} 
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link nav-a" href="logout.htm">
-								Logout
-							</a>
-						</li>						
+						<li class="nav-item"><a class="nav-link nav-a"
+							href="userInfo.htm"> Profile </a></li>
+						<li class="nav-item"><a class="nav-link nav-a"
+							href="logout.htm"> Logout </a></li>
 					</c:when>
 					<c:otherwise>
-						<li class="nav-item"><a class="nav-link nav-a" href="login.htm">Login</a></li>
-						<li class="nav-item"><a class="nav-link nav-a" href="register.htm">Register</a></li>
+						<li class="nav-item"><a class="nav-link nav-a"
+							href="login.htm">Login</a></li>
+						<li class="nav-item"><a class="nav-link nav-a"
+							href="register.htm">Register</a></li>
 					</c:otherwise>
 				</c:choose>
 
@@ -72,20 +63,33 @@
 		<div style="padding-bottom: 50px">
 			<h1>CHALLENGES</h1>
 		</div>
+		<c:if test="${flagError==true }">
+			<div class="alert alert-danger alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Sai flag!</strong> Vui lòng kiểm tra lại độ dài và định dạng flag.
+			</div>
+		</c:if>
+		<c:if test="${wrongFlag==true }">
+			<div class="alert alert-danger alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Sai flag!</strong> Vui lòng kiểm tra lại flag.
+			</div>
+		</c:if>
+		<c:if test="${rightFlag ==true}">
+			<div class="alert alert-success alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Đúng rồi!</strong> Chúc mừng bạn đã giải được bài mới.
+			</div>
+		</c:if>
 		<c:forEach var="c" items="${challs}" varStatus="counts">
 			<div class="my-4">
 				<!-- khối điều khiển collapse -->
-				<div class="challenge-block py-2" 
-					data-toggle="collapse"
+				<div class="challenge-block py-2" data-toggle="collapse"
 					data-target="#${ counts.count}">
-					${c.challengeName} - Score: ${c.score } 
-					<span
-						class="badge badge-info float-right mr-2">${c.major}
-					</span>
+					${c.challengeName} - Score: ${c.score } <span
+						class="badge badge-info float-right mr-2">${c.major} </span>
 					<c:if test="${c.isSovledBy(sessionScope.user.mail)}">
-						<span
-							class="badge badge-success float-right mr-2">Solved
-						</span>
+						<span class="badge badge-success float-right mr-2">Solved </span>
 					</c:if>
 				</div>
 				<!-- khối collapse -->
@@ -99,12 +103,9 @@
 						<!-- hint -->
 						<div>
 							<!-- khối điều khiển collapse của hint -->
-							<button class="btn btn-info my-3"
-										 data-toggle="collapse"
-										 data-target="#id${counts.count}"
-										 style="width: 62%">
-										 Hint
-							</button>
+							<button class="btn btn-info my-3" data-toggle="collapse"
+								data-target="#id${counts.count}" style="width: 62%">
+								Hint</button>
 							<!-- khối collapse của hint -->
 							<div id="id${ counts.count}" class="collapse">${c.hint }</div>
 						</div>
@@ -113,9 +114,10 @@
 							<div>
 								<form>
 									<div>
-										<input type="text" name="id" value="${c.id }" hidden/>
-										<input type="text" name="flag" style="width: 50%" />
-										<button  name="submitFlag" class="btn btn-success">Submit flag</button>
+										<input type="text" name="id" value="${c.id }" hidden /> <input
+											type="text" name="flag" style="width: 50%" />
+										<button name="submitFlag" class="btn btn-success">Submit
+											flag</button>
 									</div>
 								</form>
 							</div>

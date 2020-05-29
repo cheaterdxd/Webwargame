@@ -2,7 +2,7 @@
     font-family: 'Press Start 2P', cursive;
     src:url("Press_Start_2P/PressStart2P-Regular");
     text-transform: uppercase;
-    text-shadow: 4px 4px #66a1a3;
+    text-shadow: 3px 1px #66a1a3;
     padding-top: 15px;
     color:#36595a;
   }
@@ -33,6 +33,9 @@
   color: #124F51;
   text-transform: uppercase;
   font-weight: 500;
+}
+.box a{
+	color: #124F51;
 }
 .box input[type = "text"],.box input[type = "password"], .box input[type = "email"]{
   border:0;
@@ -66,5 +69,13 @@
 .challenge-block{
 	border: 1px solid #c6e2e9;
 	border-radius: 25px;
+}
+.footer{
+	text-align: center;
+}
+.hr {
+    height: 1px;
+    background-color: white;
+    border: none;
 }
 

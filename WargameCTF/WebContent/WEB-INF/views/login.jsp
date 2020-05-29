@@ -54,6 +54,8 @@
 						class="form-control" name="password" required="required" placeholder="Password"
 						maxlength="20">
 		<input type="submit" name="login" value="Login">
+		<h6 class="text-danger">${message }</h6>
+		<a href="forgetPassword.htm"> Forgot password ?</a>
 	</form>
 
 </body>

@@ -27,7 +27,7 @@ public class SolvedDAO {
 
 			// lưu tạm dữ liệu
 			session.save(solved);
-
+			System.out.println("them solved thanh cong");
 			// nếu không xảy ra vấn đề thì commit
 			trans.commit();
 		} catch (Exception e) {

@@ -16,6 +16,12 @@
 <link rel="stylesheet" href="./css/bootstrap.min.css">
 <link rel="stylesheet" href="./custom.css?version=1">
 <link rel="stylesheet" href="./navbar.css?version=1">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </head>
 
 <body class="bg-dark">
@@ -42,8 +48,8 @@
 							<li class="nav-item"><a class="nav-link nav-a"
 								href="adminPanel/adminPanel.htm"> Admin Panel </a></li>
 						</c:if>
-						<li class="nav-item"><a class="nav-link text-success"
-							href="userInfo.htm"> User ${sessionScope.user.userName} </a></li>
+						<li class="nav-item"><a class="nav-link nav-a"
+							href="userInfo.htm"> Profile </a></li>
 						<li class="nav-item"><a class="nav-link nav-a"
 							href="logout.htm"> Logout </a></li>
 					</c:when>
@@ -58,17 +64,22 @@
 			</ul>
 		</div>
 	</nav>
-	<div>
-		<form:form action="forgetPassword.htm" cssClass="box">
-			<h1>forget password</h1>
-			<input type="text" class="form-control" name="mail"
-						required="required" placeholder="Email" pattern="(([^<>()\[\]\\.,;:\s@]+(\.[^<>()\[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$">
-			<h6 class="text-danger">${message }</h6>
-			<input type="submit" name="forgetPassword" value="Send">
-		</form:form>
-
-
-	</div>
+	<c:if test="${success }">
+		<div class="alert alert-success alert-dismissible"
+			style="margin-top: 100px;">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>Thành công!</strong> Mật khẩu đã được thay đổi.
+		</div>
+	</c:if>
+	<form action="changePassword.htm" class="box" method="post">
+		<h1>Change password</h1>
+		<input type="password" name="oldPassword" required="required"
+			placeholder="Old password">
+		<h6 class="text-danger">${oldPassError}</h6>
+		<input type="password" name="newPassword" required="required"
+			placeholder="New password" maxlength="20">
+		<h6 class="text-danger">${newPassError}</h6>
+		<input type="submit" name="submit" value="Change">
+	</form>
 </body>
-
 </html>
